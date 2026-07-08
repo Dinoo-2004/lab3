@@ -48,18 +48,8 @@ if (user != null && BCrypt.checkpw(password, user.getPassword())) {
         session.setAttribute("logUser", user);
         response.sendRedirect("index.jsp");
     } else {
-        // Lấy PrintWriter từ response để in ra trình duyệt
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head><title>Login Error</title></head>");
-            out.println("<body>");
-            out.println("<h3 style='color:red;'>User not found or incorrect password.</h3>");
-            out.println("<a href='registration.jsp'>Click here to register</a> hoặc ");
-            out.println("<a href='login.jsp'>Quay lại trang đăng nhập</a>"); // Đổi thành tên file login của bạn
-            out.println("</body>");
-            out.println("</html>");
-        }
+        request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác!");
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
     }
 

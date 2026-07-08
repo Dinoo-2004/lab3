@@ -71,7 +71,7 @@ protected void doPost(HttpServletRequest request,
 
 
             request.getRequestDispatcher(
-            "resetPassword.jsp")
+            "ResetPassword.jsp")
             .forward(request,response);
 
 

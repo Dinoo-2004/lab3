@@ -21,7 +21,8 @@
             <form action="LoginServlet" method="post">
                 <h1>login Account</h1>
                 
-                <!--username -->
+                <p style="color:red; text-align:center">${error}</p>
+                
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" name="name" placeholder="Enter username" required>
@@ -29,14 +30,12 @@
                 </div>
                 
                         
-                <!--password-->
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" name="password" placeholder="Enter password" required>
                     <small></small>                   
                 </div>
                                                 
-                <!--button-->
                 <input type="submit" value="Login">
                 <a href="forgotPassword.jsp"> Forget Password</a>
                 <a href="registration.jsp">Create New Account</a>

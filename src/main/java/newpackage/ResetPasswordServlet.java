@@ -45,7 +45,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
 
         String sql =
-                "UPDATE users SET password=? WHERE name=?";
+                "UPDATE user SET password=? WHERE name=?";
 
 
         PreparedStatement ps =
@@ -72,7 +72,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             );
 
             request.getRequestDispatcher(
-                    "resetPassword.jsp"
+                    "ResetPassword.jsp"
             ).forward(request,response);
 
         }

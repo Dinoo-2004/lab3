@@ -65,7 +65,10 @@ if(request.getParameter("submit") != null){
 
 <div class="container mt-4">
 
-<h2 class="mb-4">Student Register Form</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Student Register Form</h2>
+    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+</div>
 
 <div class="row">
 
