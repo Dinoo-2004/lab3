@@ -1,14 +1,45 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.sql.*"%>
-
+<%@page import="newpackage.User"%>
+<%
+    User logUser = (User) session.getAttribute("logUser");
+    if(logUser == null){
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Student Register</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .custom-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 25px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .table-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            background: #ffffff;
+        }
+        .header-title {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+    </style>
 </head>
 
 <body>
@@ -63,97 +94,69 @@ if(request.getParameter("submit") != null){
 }
 %>
 
-<div class="container mt-4">
+<div class="container py-5">
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Student Register Form</h2>
-    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+<div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-3">
+    <h2 class="header-title"><i class="bi bi-mortarboard-fill text-primary me-2"></i> Student Register Form</h2>
+    <div class="d-flex align-items-center">
+        <span class="text-secondary fw-bold me-4"><i class="bi bi-person-circle me-1"></i> Xin chào, <%= logUser.getName() %>!</span>
+        <a href="LogoutServlet" class="btn btn-outline-danger px-4 shadow-sm"><i class="bi bi-box-arrow-right me-1"></i> Logout</a>
+    </div>
 </div>
 
 <div class="row">
 
     <!-- ================= FORM ================= -->
 
-    <div class="col-sm-4">
+    <div class="col-lg-4 mb-4">
 
-        <form method="post">
+        <div class="custom-card">
+            <h5 class="mb-4 text-secondary"><i class="bi bi-person-plus-fill me-2"></i>Add New Record</h5>
+            <form method="post">
 
-            <div class="mb-3">
-                <label class="form-label">
-                    Student Name
-                </label>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="sname" name="sname" placeholder="Student Name" required>
+                    <label for="sname">Student Name</label>
+                </div>
 
-                <input
-                    type="text"
-                    class="form-control"
-                    name="sname"
-                    placeholder="Student Name"
-                    required>
-            </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="course" name="course" placeholder="Course" required>
+                    <label for="course">Course</label>
+                </div>
 
-            <div class="mb-3">
-                <label class="form-label">
-                    Course
-                </label>
+                <div class="form-floating mb-4">
+                    <input type="number" class="form-control" id="fee" name="fee" placeholder="Fee" required>
+                    <label for="fee">Fee ($)</label>
+                </div>
 
-                <input
-                    type="text"
-                    class="form-control"
-                    name="course"
-                    placeholder="Course"
-                    required>
-            </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="reset" class="btn btn-light px-4"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset</button>
+                    <button type="submit" name="submit" class="btn btn-primary px-4 shadow-sm"><i class="bi bi-check2-circle me-1"></i> Submit</button>
+                </div>
 
-            <div class="mb-3">
-                <label class="form-label">
-                    Fee
-                </label>
-
-                <input
-                    type="number"
-                    class="form-control"
-                    name="fee"
-                    placeholder="Fee"
-                    required>
-            </div>
-
-            <div class="text-end">
-
-                <input
-                    type="submit"
-                    name="submit"
-                    value="Submit"
-                    class="btn btn-primary">
-
-                <input
-                    type="reset"
-                    value="Reset"
-                    class="btn btn-warning">
-
-            </div>
-
-        </form>
+            </form>
+        </div>
 
     </div>
 
     <!-- ================= TABLE ================= -->
 
-    <div class="col-sm-8">
+    <div class="col-lg-8">
 
-        <table class="table table-bordered table-striped">
+        <div class="table-wrapper">
+            <table class="table table-hover align-middle mb-0">
 
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Student Name</th>
-                    <th>Course</th>
-                    <th>Fee</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Student Name</th>
+                        <th>Course</th>
+                        <th>Fee</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
 
-            <tbody>
+                <tbody>
 
 <%
 Connection con = null;
@@ -178,35 +181,29 @@ try{
 
 <tr>
 
-    <td><%= rs.getInt("id") %></td>
+    <td class="ps-4 fw-bold text-secondary"><%= rs.getInt("id") %></td>
 
     <td><%= rs.getString("stname") %></td>
 
-    <td><%= rs.getString("course") %></td>
+    <td><span class="badge bg-info text-dark rounded-pill px-3 py-2"><%= rs.getString("course") %></span></td>
 
-    <td><%= rs.getString("fee") %></td>
+    <td class="text-success fw-bold">$<%= rs.getString("fee") %></td>
 
-    <td>
+    <td class="text-center">
 
         <a
         href="update.jsp?id=<%=rs.getInt("id")%>"
-        class="btn btn-success btn-sm">
-
-        Edit
-
+        class="btn btn-sm btn-outline-success me-2"
+        title="Edit">
+            <i class="bi bi-pencil-square"></i> Edit
         </a>
-
-    </td>
-
-    <td>
 
         <a
         href="delete.jsp?id=<%=rs.getInt("id")%>"
-        class="btn btn-danger btn-sm"
-        onclick="return confirm('Are you sure?')">
-
-        Delete
-
+        class="btn btn-sm btn-outline-danger"
+        onclick="return confirm('Are you sure you want to delete this record?')"
+        title="Delete">
+            <i class="bi bi-trash"></i> Delete
         </a>
 
     </td>
@@ -220,7 +217,7 @@ try{
 catch(Exception e){
 
     out.println("<tr>");
-    out.println("<td colspan='6' style='color:red'>");
+    out.println("<td colspan='5' class='text-danger text-center p-4'>");
     out.println(e.getMessage());
     out.println("</td>");
     out.println("</tr>");
@@ -240,9 +237,10 @@ finally{
 }
 %>
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
+        </div>
 
     </div>
 
