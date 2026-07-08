@@ -1,0 +1,105 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+package newpackage;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.mindrot.jbcrypt.BCrypt;
+import jakarta.servlet.annotation.WebServlet;
+
+
+/**
+ *
+ * @author Dinoo
+ */
+
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        
+    response.setContentType("text/html;charset=UTF-8"); // Định dạng trả về HTML tiếng Việt
+    
+    String name = request.getParameter("name");
+    String password = request.getParameter("password");
+    
+    UserDatabase db = new UserDatabase(ConnectionPro.getConnection());
+    User user = db.logUser(name);
+    
+if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+        HttpSession session = request.getSession();
+        session.setAttribute("logUser", user);
+        response.sendRedirect("index.jsp");
+    } else {
+        // Lấy PrintWriter từ response để in ra trình duyệt
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head><title>Login Error</title></head>");
+            out.println("<body>");
+            out.println("<h3 style='color:red;'>User not found or incorrect password.</h3>");
+            out.println("<a href='registration.jsp'>Click here to register</a> hoặc ");
+            out.println("<a href='login.jsp'>Quay lại trang đăng nhập</a>"); // Đổi thành tên file login của bạn
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}

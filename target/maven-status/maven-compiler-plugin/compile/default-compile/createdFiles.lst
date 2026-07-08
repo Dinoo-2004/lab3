@@ -1,0 +1,10 @@
+newpackage\ResetPasswordServlet.class
+newpackage\LoginServlet.class
+newpackage\RegisterServlet.class
+com\mycompany\lab3\resources\JakartaEE10Resource.class
+newpackage\User.class
+com\mycompany\lab3\JakartaRestConfiguration.class
+newpackage\UserDatabase.class
+newpackage\LogoutServlet.class
+newpackage\ForgotPasswordServlet.class
+newpackage\ConnectionPro.class
